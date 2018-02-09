@@ -1,0 +1,13 @@
+<form #loginForm="ngForm" method='post' (submit)="login()">
+  <div>
+    <h3>
+      Enter username...
+    </h3>
+    <input type='text' name='name' [(ngModel)]='username' required pattern='^\w{2,37}$'>
+  </div>
+  <button
+    [disabled] = 'loginForm.invalid'
+    type='submit'
+    name='submit'
+    class='submitbutton'>Login</button>
+</form>

@@ -1,0 +1,23 @@
+{
+  "name": "aMEANapp",
+  "version": "0.0.7",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"COMMAND TESTED!!\" && exit 1"
+  },
+  "keywords": [],
+  "author": "NS",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "fs": "0.0.1-security",
+    "mongoose": "^5.0.4",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@angular/cli": "^1.6.8"
+  }
+}
