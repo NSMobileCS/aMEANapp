@@ -6,13 +6,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { UserviewComponent } from './userview/userview.component';
-import { ItemviewComponent } from './itemview/itemview.component';
+
 
 import { DataService } from './data.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { UserlistComponent } from './userlist/userlist.component';
+import { ResultsComponent } from './results/results.component';
+import { ProdbidsComponent } from './dashboard/prodbids/prodbids.component';
 
 
 
@@ -21,9 +21,8 @@ import { UserlistComponent } from './userlist/userlist.component';
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    UserviewComponent,
-    ItemviewComponent,
-    UserlistComponent
+    ResultsComponent,
+    ProdbidsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const Idea = mongoose.model('Idea');
-const Like = mongoose.model('Like');
+const Product = mongoose.model('Product');
+const Bid = mongoose.model('Bid');
 const User = mongoose.model('User');
 
 
@@ -49,19 +49,6 @@ module.exports = {
         req.session.destroy( () => res.json({'ok':true}) )
     },
 
-    users: function (req, res) {
-        User.find(
-            {},
-            (err, users) => {
-                if (err) {
-                    return res.json(err);
-                } else {
-                    return res.json(users);
-                }
-            }
-        )
-    },
-
     getUser: function (req, res) {
         if (req.session.user && req.session.user.name && req.session.id ) {
             return res.json(req.session.user);
@@ -70,72 +57,48 @@ module.exports = {
         }
     },
 
-    viewUser: function (req, res) {
-        User.findById(req.params.id).populate({
-            path: 'likes',
-            populate: {path: '_idea'}
-        }).exec(
-            (err, user) => {
+    listProducts: function (req, res) {
+        Product.find({}).populate('bids').exec(
+            (err, prods) => {
                 if (err) {
-                    console.log(err);
-                    res.status(400).json(err);
+                    return res.json(err);
                 } else {
-                    res.json(user);
+                    return res.json(prods);
                 }
             }
         )
     },
 
-    ideas: function (req, res) {
-        Idea.find({}).populate('_user').exec(
-            (err, ideas) => {
-                if (err) {
-                    return res.json(err);
-                } else {
-                    return res.json(ideas);
-                }
-            }
+    setProducts: function (req, res) {
+        Product.remove(
+            {},
+            (err) => console.dir(err)
         );
+        for (let idx=0; idx < 3; idx++) {
+            Product.create({name: `Product ${idx}`})
+        }
+        return res.json({ok:true});
     },
 
-    oneIdea: function (req, res) {
-        Idea.findOne({_id: req.params.id}).populate('_user').populate({
-                path: 'likes',
-                populate: { path: '_user'}
-            }).exec(
-            (err, idea) => {
+    getProdBids: function (req, res) {
+        Product.findById(req.params.id).populate(
+            {
+                path: 'bids',
+                populate: [
+                    { path: '_user' },
+                    { path: 'value' }
+                ]
+            }
+        ).exec(
+            (err, prod) => {
                 if (err) console.log(err);
-                return res.json(idea);
+                return res.json(prod);
             }
         );
     },
 
-    newIdea: function (req, res) {
-        if (!req.session.user || req.session.user.id.length < 1) {
-            return res.status(400).json({errors: ["not logged in"]});
-        } else {
-            User.findById(
-                req.session.user.id,
-                (err, user) => {
-                    if (err) return res.status(400).json(err);
-                    Idea.create(
-                        {
-                            'body': req.body.body,
-                            '_user': req.session.user.id
-                        },
-                        (err, idea) => {
-                            if (err) return res.json(err);
-                            user.ideas.push(idea._id);
-                            user.save();
-                            return res.json({ok: true})
-                        }
-                    );
-                }
-            )
-        };
-    },
 
-    like: function (req, res) {
+    postBid: function (req, res) {
         if (!req.session.user || req.session.user.id.length < 1) {
             return res.status(400).json({errors: ["not logged in"]});
         } else {
@@ -143,54 +106,33 @@ module.exports = {
                 req.session.user.id,
                 (err, user) => {
                     if (err) return res.json(err);
-                    Idea.findById(
+                    Product.findById(
                         req.params.id,
-                        (err, idea) => {
-                            let like = Like.create(
+                        (err, prod) => {
+                            Bid.create(
                                 {
                                     _user: user._id,
-                                    _idea: idea._id
+                                    _product: prod._id,
+                                    value: Number(req.body.value)
                                 },
-                                (err, thisLike) => {
-                                    console.log('like created, not yet saved');
-                                    if (err) return res.json(err);
-                                    user.likes.push(thisLike._id);
-                                    user.save(
+                                (err, thisBid) => {
+                                    if (err) console.log(err);
+                                    prod.bids.push(thisBid._id);
+                                    prod.save(
                                         (err) => {
                                             if (err) {
-                                                return res.json(err);
+                                                console.dir(err);
                                             } else {
-                                                idea.likes.push(thisLike._id);
-                                                idea.save(
-                                                    (err) => {
-                                                        if (err) {
-                                                            console.dir(err);
-                                                        } else {
-                                                            res.json({ok:true});
-                                                        }
-                                                    }
-                                                )
+                                                res.json({ok:true});
                                             }
                                         }
                                     );
                                 }
                             );
                         }
-                    )
-
-
+                    );
                 }
             )
         }
     }
 }
-//    }
-// }
-
-// function reqSignedIn(req, res, next) {
-//     if (req.session.user) {
-//         next(req, res, );
-//     } else {
-//         res.redirect('/')
-//     }
-// }

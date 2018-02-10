@@ -1,0 +1,25 @@
+<p>
+  {{ product.name }}
+</p>
+
+<form #bidForm="ngForm" method='post' (submit)="postBid()">
+  <label>bid $:
+    <input name='bidValue' type='text' [(ngModel)]='bidVal' required pattern="\$?\d+\.?\d*">
+  </label>
+  <button
+    [disabled] = 'bidForm.invalid'
+    type='submit'
+    name='submit'
+    class='submitbutton'>
+    Make bid
+  </button>
+</form>
+
+
+<ul>
+  <li *ngFor='let bid of product.bids'>
+    {{ bid._user.name }}   {{ bid.value }}
+  </li>
+</ul>
+
+<input type="text" [(ngModel)]='searchFilter' >

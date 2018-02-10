@@ -1,3 +1,19 @@
-<p>
-  dashboard works!
-</p>
+{{ user.name }}
+<button (click)='userLogout()'>
+  sign out
+</button><hr>
+
+<h3 *ngFor='let err of errorMessages'>
+  {{ err }}
+</h3>
+
+<table>
+  <tr>
+    <td *ngFor="let prod of productList">
+      <app-prodbids [product]='prod'></app-prodbids>
+    </td>
+  </tr>
+</table>
+
+<button (click)='finalize()'>End bid.</button>
+

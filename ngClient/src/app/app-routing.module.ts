@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
-import { ItemviewComponent } from './itemview/itemview.component';
-import { UserviewComponent } from './userview/userview.component';
+import { ResultsComponent } from './results/results.component';
 
 
 const routes: Routes = [
@@ -13,14 +12,14 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'dashboard/ideas', ////***REMEMBER TO CHANGE THIS***//
+    path: 'bids',
     component: DashboardComponent,
     pathMatch: 'full'
   },
 
   {
-    path: 'dashboard/users/:id',
-    component: UserviewComponent,
+    path: 'result',
+    component: ResultsComponent,
     pathMatch: 'full'
   },
 

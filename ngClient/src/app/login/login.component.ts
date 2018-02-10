@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
         this.username,
         (res) => {
           console.log(res);
-          this._router.navigateByUrl('/dashboard/ideas');
+          this._router.navigateByUrl('/bids');
         }
       );
     }
